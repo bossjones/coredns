@@ -103,14 +103,8 @@ func (uh *UpstreamHost) HealthCheckURL() {
 	uh.Lock()
 
 	// We call HealthCheckURL from proxy.go and lookup.go, bail out when nothing
-	// is configured to healthcheck.
-	if uh.CheckURL == "" { // nothing configured
-		uh.Unlock()
-		return
-	}
-
-	// Are we mid check?  Don't run another one.
-	if uh.Checking {
+	// is configured to healthcheck. Or we mid check?  Don't run another one.
+	if uh.CheckURL == "" || uh.Checking { // nothing configured
 		uh.Unlock()
 		return
 	}
